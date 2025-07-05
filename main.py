@@ -10,6 +10,7 @@ from pynput import keyboard
 
 #initialize pygame window
 pygame.init()
+pygame.joystick.init()
 width, height = 370, 110
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Input Viewer")
@@ -65,62 +66,72 @@ button_group.add(left, right, down, up, cw, ccw, hold, zone)
 def on_press(key):
     global intensity
     try:
-        if key.char == 'r':  # left key
+        if key.char == key_left:  # left key
             left.image = left.b_image
-            intensity += 1
-        elif key.char == 't':  # right key
+        elif key.char == key_right:  # right key
             right.image = right.b_image
-            intensity += 1
-        elif key.char == 's':  # down key
+        elif key.char == key_down:  # down key
             down.image = down.b_image
-            intensity += 1
-        elif key.char == 'i':  # cw key
+        elif key.char == key_cw:  # cw key
             cw.image = cw.b_image
-            intensity += 1
-        elif key.char == 'n':  # ccw key
+        elif key.char == key_ccw:  # ccw key
             ccw.image = ccw.b_image
-            intensity += 1
-        elif key.char == 'e':  # hold key
-            hold.image = hold.b_image
-            intensity += 1
-        elif key.char == '-':
+        elif key.char == key_hold:  # hold key
+            hold.image = hold.b_image          
+        elif key.char == key_zone:
             zone.image = zone.b_image
-            intensity += 1
     except AttributeError:
-        if key == keyboard.Key.alt_l or key == keyboard.Key.alt_r:  # alt key
+        if key == key_up:
             up.image = up.b_image
-            intensity += 1
-        elif key == keyboard.Key.space:  # space key
+        elif key == key_left:  # left key
+            left.image = left.b_image
+        elif key == key_right:  # right key
+            right.image = right.b_image
+        elif key == key_down:  # down key
+            down.image = down.b_image
+        elif key == key_cw:  # cw key
+            cw.image = cw.b_image
+        elif key == key_ccw:  # ccw key
+            ccw.image = ccw.b_image
+        elif key == key_hold:  # hold key
+            hold.image = hold.b_image
+        elif key == key_zone:  # space key
             zone.image = zone.b_image
-            intensity += 1
+    intensity += 1
     print(f'Intensity: {intensity}')
 
 def on_release(key):
     try:
-        if key.char == 'r':  # left key
+        if key.char == key_left:  # left key
             left.image = left.d_image
-        elif key.char == 't':  # right key
+        elif key.char == key_right:  # right key
             right.image = right.d_image
-        elif key.char == 's':  # down key
+        elif key.char == key_down:  # down key
             down.image = down.d_image
-        elif key.char == 'i':  # cw key
+        elif key.char == key_cw:  # cw key
             cw.image = cw.d_image
-        elif key.char == 'n':  # ccw key
+        elif key.char == key_ccw:  # ccw key
             ccw.image = ccw.d_image
-        elif key.char == 'e':  # hold key
+        elif key.char == key_hold:  # hold key
             hold.image = hold.d_image
-        elif key.char == '-':
+        elif key.char == key_zone:
             zone.image = zone.d_image
     except AttributeError:
-        if key == keyboard.Key.left:  # left key
-            left.image = left.d_image
-        elif key == keyboard.Key.right:  # right key
-            right.image = right.d_image
-        elif key == keyboard.Key.down:  # down key
-            down.image = down.d_image
-        elif key == keyboard.Key.alt_l or key == keyboard.Key.alt_r:  # alt key
+        if key == key_up:
             up.image = up.d_image
-        elif key == keyboard.Key.space:  # space key
+        elif key == key_left:  # left key
+            left.image = left.d_image
+        elif key == key_right:  # right key
+            right.image = right.d_image
+        elif key == key_down:  # down key
+            down.image = down.d_image
+        elif key == key_cw:  # cw key
+            cw.image = cw.d_image
+        elif key == key_ccw:  # ccw key
+            ccw.image = ccw.d_image
+        elif key == key_hold:  # hold key
+            hold.image = hold.d_image
+        elif key == key_zone:  # space key
             zone.image = zone.d_image
 
 def listen_to_keyboard():
@@ -136,7 +147,7 @@ async def reduce_intensity(vibe):
         if intensity > 100:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(1)
-            intensity = 110
+            intensity = 100
         else:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(intensity/100)
@@ -152,21 +163,19 @@ async def main():
     global intensity
     vibe = await plug_connect()
     reduction_counter = 0
-    joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
-    for joystick in joysticks:
-        joystick.init()
-    
+    joysticks = []
+    print(joysticks)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        for joystick in joysticks:
-            for i in range(joystick.get_numbuttons()):
-                if joystick.get_button(i):
-                    intensity += 1
-                    print(f'Intensity: {intensity}')
-        # Rest of your code here
+            elif event.type == pygame.JOYDEVICEADDED:
+                print(f"Joystick {event.device_index} connected")
+                joysticks.append(pygame.joystick.Joystick(event.device_index))
+            elif event.type == pygame.JOYBUTTONDOWN or event.type == pygame.JOYAXISMOTION or event.type == pygame.JOYHATMOTION:
+                intensity += 1
+                print(f'Intensity: {intensity}')
         button_group.draw(screen)
         pygame.display.update()
         pygame.time.Clock().tick(60)  # Limit to 60 FPS

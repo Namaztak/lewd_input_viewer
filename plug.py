@@ -21,9 +21,10 @@ async def plug_connect():
         print(device.name)
         if len(device.actuators) != 0:
             await device.actuators[0].command(0.5)
-    if len(device.linear_actuators) != 0:
-            await device.linear_actuators[0].command(1000, 0.5)
-    if len(device.rotatory_actuators) != 0:
-            await device.rotatory_actuators[0].command(0.5, True)
+        if len(device.linear_actuators) != 0:
+                await device.linear_actuators[0].command(1000, 0.5)
+        if len(device.rotatory_actuators) != 0:
+                await device.rotatory_actuators[0].command(0.5, True)
 
-    return device
+        return device
+    return None

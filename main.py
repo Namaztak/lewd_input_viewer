@@ -2,11 +2,10 @@ import pygame
 import os
 import threading
 import sys
-import configparser
 import asyncio
 from globals import *
 from plug import *
-from pynput import keyboard
+from pynput import keyboard, mouse
 
 #initialize pygame window
 pygame.init()
@@ -15,7 +14,7 @@ width, height = 370, 110
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Input Viewer")
 
-#set background to green
+#set background to green for chromakey usage
 screen.fill((0, 255, 0))
 
 #load icons
@@ -63,6 +62,28 @@ zone = Button(200, 60, "zone", pygame.K_SPACE)
 button_group = pygame.sprite.Group()
 button_group.add(left, right, down, up, cw, ccw, hold, zone)
 
+#Functions to handle mouse input
+def on_move(x, Y):
+    global intensity
+    intensity += .01
+    print(f'Intensity: {intensity}')
+
+def on_click(x, y, button, pressed):
+    global intensity
+    intensity += 1
+    print(f'Intensity: {intensity}')
+
+def on_scroll(x, y, dx, dy):
+    global intensity
+    intensity += .2
+    print(f'Intensity: {intensity}')
+
+def listen_to_mouse():
+    with mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as mouse_listener:
+        mouse_listener.join()
+
+
+#Functions to handle keyboard input
 def on_press(key):
     global intensity
     try:
@@ -104,45 +125,104 @@ def on_release(key):
     try:
         if key.char == key_left:  # left key
             left.image = left.d_image
-        elif key.char == key_right:  # right key
+        elif key.char == key_right:    # right key
             right.image = right.d_image
-        elif key.char == key_down:  # down key
+        elif key.char == key_down:     # down key
             down.image = down.d_image
-        elif key.char == key_cw:  # cw key
+        elif key.char == key_cw:       # cw key
             cw.image = cw.d_image
-        elif key.char == key_ccw:  # ccw key
+        elif key.char == key_ccw:      # ccw key
             ccw.image = ccw.d_image
-        elif key.char == key_hold:  # hold key
+        elif key.char == key_hold:     # hold key
             hold.image = hold.d_image
-        elif key.char == key_zone:
+        elif key.char == key_zone:     # Zone key
             zone.image = zone.d_image
     except AttributeError:
         if key == key_up:
             up.image = up.d_image
-        elif key == key_left:  # left key
+        elif key == key_left:          # left key
             left.image = left.d_image
-        elif key == key_right:  # right key
+        elif key == key_right:         # right key
             right.image = right.d_image
-        elif key == key_down:  # down key
+        elif key == key_down:          # down key
             down.image = down.d_image
-        elif key == key_cw:  # cw key
+        elif key == key_cw:            # cw key
             cw.image = cw.d_image
-        elif key == key_ccw:  # ccw key
+        elif key == key_ccw:           # ccw key
             ccw.image = ccw.d_image
-        elif key == key_hold:  # hold key
+        elif key == key_hold:          # hold key
             hold.image = hold.d_image
-        elif key == key_zone:  # space key
+        elif key == key_zone:          # Zone key
             zone.image = zone.d_image
+
+def on_controller_press(button=None, val=None):
+    if button != None:
+        if button == button_cw:         # cw key
+            cw.image = cw.b_image
+        elif button == button_ccw:      # ccw key
+            ccw.image = ccw.b_image
+        elif button == button_hold:     # hold key
+            hold.image = hold.b_image
+        elif button == button_zone:     # Zone key
+            zone.image = zone.b_image
+    elif val != None:
+        if val == button_up:            # DPad up
+            up.image = up.b_image
+        elif val == button_left:        # DPad left
+            left.image = left.b_image
+        elif val == button_right:       # DPad right
+            right.image = right.b_image
+        elif val == button_down:        # DPad down
+            down.image = down.b_image
+        elif val == (1, 1):             # DPad diagonals
+            up.image = up.b_image
+            right.image = right.b_image
+        elif val == (-1, -1):
+            down.image = down.b_image
+            left.image = left.b_image
+        elif val == (1, -1):
+            right.image = right.b_image
+            down.image = down.b_image
+        elif val == (-1, 1):
+            up.image = up.b_image
+            left.image = left.b_image
+        elif val == (0, 0):             # DPad center
+            up.image = up.d_image
+            left.image = left.d_image
+            right.image = right.d_image
+            down.image = down.d_image
+
+def on_controller_release(button=None, val=None):
+    if button != None:
+        if button == button_cw:         # cw key
+            cw.image = cw.d_image
+        elif button == button_ccw:      # ccw key
+            ccw.image = ccw.d_image
+        elif button == button_hold:     # hold key
+            hold.image = hold.d_image
+        elif button == button_zone:
+            zone.image = zone.d_image
+    elif val != None:
+        if val == button_up:            # DPad up
+            up.image = up.d_image
+        elif val == button_left:        # DPad left
+            left.image = left.d_image
+        elif val == button_right:       # DPad right
+            right.image = right.d_image
+        elif val == button_down:        # DPad down
+            down.image = down.d_image
 
 def listen_to_keyboard():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
+
+#Handles main communication with toy, and reduces intensity after sending the vibration each loop
 async def reduce_intensity(vibe):
     global intensity
     if intensity == 0:
         for i in range(len(vibe.actuators)):
-            await vibe.actuators[i].command(0.01)
+            await vibe.actuators[i].command(0)
     if intensity > 0:
         if intensity > 100:
             for i in range(len(vibe.actuators)):
@@ -158,13 +238,15 @@ keyboard_thread = threading.Thread(target=listen_to_keyboard)
 keyboard_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
 keyboard_thread.start()
 
+mouse_thread = threading.Thread(target=listen_to_mouse)
+mouse_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
+mouse_thread.start()
 
 async def main():
     global intensity
     vibe = await plug_connect()
     reduction_counter = 0
     joysticks = []
-    print(joysticks)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -173,9 +255,26 @@ async def main():
             elif event.type == pygame.JOYDEVICEADDED:
                 print(f"Joystick {event.device_index} connected")
                 joysticks.append(pygame.joystick.Joystick(event.device_index))
-            elif event.type == pygame.JOYBUTTONDOWN or event.type == pygame.JOYAXISMOTION or event.type == pygame.JOYHATMOTION:
-                intensity += 1
+                print(joysticks)
+            elif event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION,pygame.JOYHATMOTION, pygame.MOUSEBUTTONDOWN]:
+                if event.type == pygame.JOYAXISMOTION:
+                    intensity += 0.01
+                else:
+                    if event.type == pygame.JOYHATMOTION:
+                        try:
+                            on_controller_press(val=event.value)
+                        except AttributeError:
+                            pass
+                    elif event.type == pygame.JOYBUTTONDOWN:
+                        try:
+                            on_controller_press(event.button)
+                        except AttributeError:
+                            pass
+                    intensity += 1
                 print(f'Intensity: {intensity}')
+            elif event.type == pygame.JOYBUTTONUP:
+                on_controller_release(event.button)
+                
         button_group.draw(screen)
         pygame.display.update()
         pygame.time.Clock().tick(60)  # Limit to 60 FPS

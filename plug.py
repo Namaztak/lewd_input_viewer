@@ -13,11 +13,13 @@ async def plug_connect():
         return
     
     await client.start_scanning()
-    await asyncio.sleep(10)
+    await asyncio.sleep(3)
     await client.stop_scanning()
 
     if len(client.devices) != 0:
-        device = client.devices[1]
+        for key, val in client.devices.items():
+            print(key, val.name)
+        device = client.devices[input("Enter the number of the device you'll be using: ")]
         print(device.name)
         if len(device.actuators) != 0:
             await device.actuators[0].command(0.5)

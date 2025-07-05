@@ -152,7 +152,7 @@ async def reduce_intensity(vibe):
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(intensity/100)
 
-    intensity = max(0, intensity - 10)
+    intensity = max(0, intensity - intensity_reduction_factor)
 
 keyboard_thread = threading.Thread(target=listen_to_keyboard)
 keyboard_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
@@ -182,7 +182,7 @@ async def main():
         if reduction_counter > 180:
             await reduce_intensity(vibe)
             reduction_counter = 0
-            print("Intensity reduced by 10")
+            print(f"Intensity reduced by {intensity_reduction_factor}%")
         reduction_counter += 1
 if __name__ == "__main__":
     asyncio.run(main())

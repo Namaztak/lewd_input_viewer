@@ -9,6 +9,10 @@ os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 #find what the keycode is here:
 #https://pynput.readthedocs.io/en/latest/_modules/pynput/keyboard/_base.html#Controller.press
 
+
+#This variable controls how fast the intensity goes down
+intensity_reduction_factor = 11
+
 key_left = "r"
 key_right = "t"
 key_down = "s"

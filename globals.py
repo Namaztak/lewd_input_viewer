@@ -5,16 +5,23 @@ from pygame import joystick, event
 intensity = 0
 os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 
+
+#===================Intensity reduction====================
+#This variable controls how fast the intensity goes down
+#The intensity variable is reduced by this amount every loop
+    #Every loop is 3 seconds, so, for example, if this is set to 10, mashing up to 80 intensity,
+    #then chilling for 3 seconds will reduce it to 70, and so on.
+#Try out different values to see how high your APM needs to be for the intended strength of vibrations.
+#I'd recommend starting with 10, then going up or down until it feels right. You can use decimals, too, if you feel like it.
+
+intensity_reduction_factor = 11
+
+#===================Keyboard binds=========================
 #Tetris keybinds for the input viewer
 #If any of the keys you use aren't letters
 #find what the keycode is here:
 #https://pynput.readthedocs.io/en/latest/_modules/pynput/keyboard/_base.html#Controller.press
 
-
-#This variable controls how fast the intensity goes down
-intensity_reduction_factor = 11
-
-#===================Keyboard binds=========================
 key_left = "r"
 key_right = "t"
 key_down = "s"

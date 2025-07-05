@@ -66,17 +66,17 @@ button_group.add(left, right, down, up, cw, ccw, hold, zone)
 def on_move(x, Y):
     global intensity
     intensity += .01
-    print(f'Intensity: {intensity}')
+    print(f'Intensity: {intensity:.2f}')
 
 def on_click(x, y, button, pressed):
     global intensity
     intensity += 1
-    print(f'Intensity: {intensity}')
+    print(f'Intensity: {intensity:.2f}')
 
 def on_scroll(x, y, dx, dy):
     global intensity
     intensity += .2
-    print(f'Intensity: {intensity}')
+    print(f'Intensity: {intensity:.2f}')
 
 def listen_to_mouse():
     with mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as mouse_listener:
@@ -119,7 +119,7 @@ def on_press(key):
         elif key == key_zone:  # space key
             zone.image = zone.b_image
     intensity += 1
-    print(f'Intensity: {intensity}')
+    print(f'Intensity: {intensity:.2f}')
 
 def on_release(key):
     try:
@@ -255,10 +255,11 @@ async def main():
             elif event.type == pygame.JOYDEVICEADDED:
                 print(f"Joystick {event.device_index} connected")
                 joysticks.append(pygame.joystick.Joystick(event.device_index))
-                print(joysticks)
+                for i in range(len(joysticks)):
+                    print(i, joysticks[i].get_name())
             elif event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION,pygame.JOYHATMOTION, pygame.MOUSEBUTTONDOWN]:
                 if event.type == pygame.JOYAXISMOTION:
-                    intensity += 0.01
+                    intensity += 0.1
                 else:
                     if event.type == pygame.JOYHATMOTION:
                         try:
@@ -271,7 +272,7 @@ async def main():
                         except AttributeError:
                             pass
                     intensity += 1
-                print(f'Intensity: {intensity}')
+                print(f'Intensity: {intensity:.2f}')
             elif event.type == pygame.JOYBUTTONUP:
                 on_controller_release(event.button)
                 
@@ -281,7 +282,7 @@ async def main():
         if reduction_counter > 180 and vibe != None:
             await reduce_intensity(vibe)
             reduction_counter = 0
-            print(f"Intensity reduced by {intensity_reduction_factor}")
+            print(f"Intensity reduced by {intensity_reduction_factor} to {intensity:.2f}")
         reduction_counter += 1
 if __name__ == "__main__":
     asyncio.run(main())

@@ -18,8 +18,10 @@ async def plug_connect():
 
     if len(client.devices) != 0:
         for key, val in client.devices.items():
-            print(key, val.name)
-        device = client.devices[input("Enter the number of the device you'll be using: ")]
+            print(f'{key}: {val.name}')
+        if len(client.devices) > 1:
+            device = client.devices[int(input("Enter the number of the device you'll be using: "))]
+        else: device = client.devices[list(client.devices.keys())[0]]
         print(device.name)
         if len(device.actuators) != 0:
             await device.actuators[0].command(0.5)

@@ -179,10 +179,10 @@ async def main():
         button_group.draw(screen)
         pygame.display.update()
         pygame.time.Clock().tick(60)  # Limit to 60 FPS
-        if reduction_counter > 180:
+        if reduction_counter > 180 and vibe != None:
             await reduce_intensity(vibe)
             reduction_counter = 0
-            print(f"Intensity reduced by {intensity_reduction_factor}%")
+            print(f"Intensity reduced by {intensity_reduction_factor}")
         reduction_counter += 1
 if __name__ == "__main__":
     asyncio.run(main())

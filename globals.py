@@ -17,3 +17,12 @@ key_cw = "i"
 key_ccw = "n"
 key_hold = "e"
 key_zone = keyboard.Key.space
+
+#button_left
+#button_right
+#button_down
+#button_up
+#button_cw
+#button_ccw
+#button_hold
+#button_zone

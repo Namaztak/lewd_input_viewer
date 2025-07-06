@@ -3,6 +3,7 @@ import os
 import threading
 import sys
 import asyncio
+import random
 from globals import *
 from plug import *
 from pynput import keyboard, mouse
@@ -221,14 +222,20 @@ async def reduce_intensity(vibe):
     if intensity == 0:
         for i in range(len(vibe.actuators)):
             await vibe.actuators[i].command(0)
+        for i in range(len(vibe.rotatory_actuators)):
+            await vibe.rotatory_actuators[i].command(0, True)
     if intensity > 0:
         if intensity > 100:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(1)
+            for i in range(len(vibe.rotatory_actuators)):
+                await vibe.rotatory_actuators[i].command(1, random.choice([True, False]))
             intensity = 100
         else:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(intensity/100)
+            for i in range(len(vibe.rotatory_actuators)):
+                await vibe.rotatory_actuators[i].command(intensity/100, random.choice([True, False]))
 
     intensity = max(0, intensity - intensity_reduction_factor)
     print(f'Sent vibration, intensity: {intensity:.2f}')

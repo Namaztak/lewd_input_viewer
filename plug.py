@@ -4,7 +4,7 @@ import time
 import logging
 
 async def plug_connect():
-    client = buttplug.Client("ButtPlug", buttplug.ProtocolSpec.v3)
+    client = buttplug.Client("Input Viewer", buttplug.ProtocolSpec.v3)
     connector = buttplug.WebsocketConnector("ws://127.0.0.1:12345", logger=client.logger)
     try:
         await client.connect(connector)

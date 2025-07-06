@@ -3,12 +3,14 @@ import os
 import threading
 import sys
 import asyncio
+import win32gui
 from globals import *
 from plug import *
 from pynput import keyboard, mouse
 
 #initialize pygame window
 pygame.init()
+
 pygame.joystick.init()
 width, height = 370, 110
 screen = pygame.display.set_mode((width, height))
@@ -16,6 +18,7 @@ pygame.display.set_caption("Input Viewer")
 
 #set background to green for chromakey usage
 screen.fill((0, 255, 0))
+
 
 #load icons
 dim_icons = {
@@ -66,17 +69,14 @@ button_group.add(left, right, down, up, cw, ccw, hold, zone)
 def on_move(x, Y):
     global intensity
     intensity += .01
-    print(f'Intensity: {intensity:.2f}')
 
 def on_click(x, y, button, pressed):
     global intensity
     intensity += 1
-    print(f'Intensity: {intensity:.2f}')
 
 def on_scroll(x, y, dx, dy):
     global intensity
     intensity += .2
-    print(f'Intensity: {intensity:.2f}')
 
 def listen_to_mouse():
     with mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as mouse_listener:
@@ -118,8 +118,7 @@ def on_press(key):
             hold.image = hold.b_image
         elif key == key_zone:  # space key
             zone.image = zone.b_image
-    intensity += 1
-    print(f'Intensity: {intensity:.2f}')
+    intensity += button_intensity
 
 def on_release(key):
     try:
@@ -233,6 +232,7 @@ async def reduce_intensity(vibe):
                 await vibe.actuators[i].command(intensity/100)
 
     intensity = max(0, intensity - intensity_reduction_factor)
+    print(f'Current intensity: {intensity:.2f}')
 
 keyboard_thread = threading.Thread(target=listen_to_keyboard)
 keyboard_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
@@ -243,6 +243,7 @@ mouse_thread.daemon = True  # Set as daemon thread so it exits when main thread 
 mouse_thread.start()
 
 async def main():
+    
     global intensity
     vibe = await plug_connect()
     reduction_counter = 0
@@ -252,14 +253,16 @@ async def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            
             elif event.type == pygame.JOYDEVICEADDED:
                 print(f"Joystick {event.device_index} connected")
                 joysticks.append(pygame.joystick.Joystick(event.device_index))
                 for i in range(len(joysticks)):
                     print(i, joysticks[i].get_name())
-            elif event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION,pygame.JOYHATMOTION, pygame.MOUSEBUTTONDOWN]:
+            elif event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION,pygame.JOYHATMOTION]:
                 if event.type == pygame.JOYAXISMOTION:
-                    intensity += 0.1
+                    intensity += analog_intensity
+                    print(f'Intensity: {intensity:.2f}')
                 else:
                     if event.type == pygame.JOYHATMOTION:
                         try:
@@ -271,7 +274,7 @@ async def main():
                             on_controller_press(event.button)
                         except AttributeError:
                             pass
-                    intensity += 1
+                    intensity += button_intensity
                 print(f'Intensity: {intensity:.2f}')
             elif event.type == pygame.JOYBUTTONUP:
                 on_controller_release(event.button)
@@ -279,10 +282,11 @@ async def main():
         button_group.draw(screen)
         pygame.display.update()
         pygame.time.Clock().tick(60)  # Limit to 60 FPS
-        if reduction_counter > 180 and vibe != None:
+        if reduction_counter > (60 * granularity) and vibe != None:
             await reduce_intensity(vibe)
             reduction_counter = 0
-            print(f"Intensity reduced by {intensity_reduction_factor} to {intensity:.2f}")
+        elif vibe == None:
+            intensity = 0
         reduction_counter += 1
 if __name__ == "__main__":
     asyncio.run(main())

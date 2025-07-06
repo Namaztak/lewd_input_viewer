@@ -17,19 +17,19 @@ os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 intensity_reduction_factor = 10
 
 #analog_intensity: Moving any analog axis (this includes triggers) increases intensity by this amount.
-    #I highly recommend setting this to a decimal value between 0 and 0.5, erring lower, especially for games that use both sticks.
+    #I highly recommend setting this to a small decimal value between 0 and 0.3, erring lower, especially for games that use both sticks.
     #Sticks get polled for their movement A LOT, so adjust this with caution.
 
 analog_intensity = 0.05
 
-#button_intensity: Pressing any button, or moving the Dpad on the controller increases intensity by this amount
+#button_intensity: Pressing any button (not including analog triggers, or arcade buttons bound to the triggers), or moving the Dpad on ANY controller increases intensity by this amount
 #I built the program with 1 in mind, so try it as is first.
 
 button_intensity = 1
 
-#granularity: #How many seconds between firing commands to the vibrator, lower is faster. Don't go lower than 1, these toys aren't THAT responsive.
+#granularity: #How many seconds between firing commands to the vibrator, lower is faster. I've only tested as low as 1, these toys probably aren't THAT responsive.
 #Also keep in mind this is directly affected by the intensity_reduction_factor. The higher that is, the faster this will make the intensity go down.
-#In other words, if you want longer vibrations, set intensity_reduction_factor lower and granularity higher.
+#In other words, if you want longer vibrations, set intensity_reduction_factor lower and granularity higher, and if you want more spiky pulses, do the opposite.
 
 granularity = 3
 
@@ -60,3 +60,21 @@ button_cw = 2           # X Button
 button_ccw = 3          # Y Button
 button_hold = 5         # Right Bumper
 button_zone = 0         # A Button
+
+#=====================Mouse Values=========================
+
+# mouse_move_intensity: How much to increase intensity when just moving your mouse.
+# I cannot stress enough how much you do not realize your mouse moves even when you're "holding still".
+# For the safety of your nerves, do not set this higher than like 0.1
+
+mouse_move_intensity = 0.05
+
+# mouse_click_intensity: How much to increase intensity when you click the mouse.
+# Feel free to set this to whatever you want. If you're clicking a lot, lower it, and if not, raise it.
+
+mouse_click_intensity = 1
+
+# mouse_scroll_intensity: How much to increase intensity when you scroll the mouse wheel.
+# If you, like me, are a speedrunner that likes to have jump bound to scrolling, say for bunnyhopping, maybe keep this one low.
+
+mouse_scroll_intensity = 0.3

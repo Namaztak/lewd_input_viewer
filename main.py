@@ -67,15 +67,15 @@ button_group.add(left, right, down, up, cw, ccw, hold, zone)
 #Functions to handle mouse input
 def on_move(x, Y):
     global intensity
-    intensity += .01
+    intensity += mouse_move_intensity
 
 def on_click(x, y, button, pressed):
     global intensity
-    intensity += 1
+    intensity += mouse_click_intensity
 
 def on_scroll(x, y, dx, dy):
     global intensity
-    intensity += .2
+    intensity += mouse_scroll_intensity
 
 def listen_to_mouse():
     with mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as mouse_listener:
@@ -231,12 +231,14 @@ async def reduce_intensity(vibe):
                 await vibe.actuators[i].command(intensity/100)
 
     intensity = max(0, intensity - intensity_reduction_factor)
-    print(f'Current intensity: {intensity:.2f}')
+    print(f'Sent vibration, intensity: {intensity:.2f}')
 
 keyboard_thread = threading.Thread(target=listen_to_keyboard)
 keyboard_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
 keyboard_thread.start()
 
+
+# Comment these next three lines out if you wanna fix the window dragging issue, but lose the progam caring about mouse inputs.
 mouse_thread = threading.Thread(target=listen_to_mouse)
 mouse_thread.daemon = True  # Set as daemon thread so it exits when main thread exits
 mouse_thread.start()

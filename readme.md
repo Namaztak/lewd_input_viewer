@@ -6,18 +6,37 @@ Only currently supports one toy at a time.
 Change settings to control intensity, and keybindings for the actual viewer in globals.py.
 The default keybinds will probably NOT match yours, but the toy vibration functionality will work no matter what your buttons are bound to.
 
+### Requirements
+* Python 3 installed.  
+* Intiface Central installed and running.  
+* A vibrator that Intiface Central can control.  
+* requirements.txt contains the following:  
+ * [buttplug-py](https://github.com/Siege-Wizard/buttplug-py/tree/main) for interfacing with the toys  
+ * [pygame](https://www.pygame.org/docs/ref/pygame.html) for the visuals and handling controller inputs  
+ * [pynput](https://pypi.org/project/pynput/) for listening to the mouse and keyboard in the background  
+* Trust in the fact that this all runs 100% locally and collects/saves absolutely nothing.  
+
+### What the fuck is a python, where's the goddamn exe?
+I made it easy for lazy people.  
+First run init.bat, then every time after that, run viewer.bat.  
+I've included a shortcut to viewer.bat so you can stick it on your taskbar or whatever, since Windows 11 doesn't just let you stick whatever the fuck you want on the taskbar, and it has to be a shortcut to something.
+
 #### What's it do and how?
-First, it connects to a locally-running Intiface Central server, and gets the connected device(s).
+First, it connects to a locally-running Intiface Central server, and gets the connected device(s).  
+If there's no server running, or no toys are connected to it, it'll leave the toy empty, and from then on it's solely an input viewer.  
+I'll make it so you can manually connect and/or switch toys later, but for now, it's gotta connect to a toy at its startup, or not at all.  
+If you've done things out of order, just close the input viewer window, and restart the script when you have your Intiface Central server running, and at least one toy connected.
 
 If there's more than one compatible device connected, it'll print them to the console and have you select which one it'll be sending vibrations to.
-Just enter the number corresponding to the one you want it to control.
+Just enter the number corresponding to the one you want it to control.  
+* Note: If you've connected more than one device to Intiface Central, it doesn't necessarily list the toys in order when it asks. It just lists all connected toys, with their corresponding number. Type ONLY the number when it asks you. I'm pretty sure if you do more than that, it'll crash, because I didn't bother to sanitize user inputs for that yet.
 
 It starts a few threads in the mean time:
 * Main thread handles all controller inputs, and deals with the actual input viewer.
 * Second thread listens to all keyboard inputs.
 * Third thread listens to all mouse inputs.
 
-All inputs on any of these devices (which are read in the background) will increment the global "intensity" value by some amount.  
+All inputs on any of these devices (which are read in the background at all times while this is running) will increment the global "intensity" value by some amount.  
 These amounts are explained, and can be seen and adjusted in globals.py.
 
 By default:  
@@ -36,3 +55,4 @@ To do:
 * Make per-usage profiles/scenes a thing.
 * Make it so it doesn't freak the fuck out while dragging the viewer window around.
 * ^ Apparently this one is impossible on Windows. Well, at least it's not my fault. Just try not to drag the window around. It doesn't really like it.
+ * Your PC is gonna freak out a bit while you drag the window, then it'll chill again. What's happening is it's pausing all the threads while you're moving the window, and since one of those threads is directly tied to your mouse input, it gets upset. After you set the window back down wherever you want it, it'll work fine again. But since this program doesn't need to be in the foreground, neither for the input listening, nor capturing its visuals in OBS or whatever, you can realistically just cover it up with whatever other programs you're running and forget it exists. If you don't care about having it handle your mouse inputs, and you'd prefer to fix this issue completely, go into main.py and comment out

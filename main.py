@@ -219,26 +219,33 @@ def listen_to_keyboard():
 #Handles main communication with toy, and reduces intensity after sending the vibration each loop
 async def reduce_intensity(vibe):
     global intensity
+    print(f'Sending vibration, intensity: {intensity:.2f}')
     if intensity == 0:
         for i in range(len(vibe.actuators)):
             await vibe.actuators[i].command(0)
         for i in range(len(vibe.rotatory_actuators)):
             await vibe.rotatory_actuators[i].command(0, True)
+        for i in range(len(vibe.linear_actuators)):
+            await vibe.linear_actuators[i].command(granularity * 1000, 0)
     if intensity > 0:
         if intensity > 100:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(1)
             for i in range(len(vibe.rotatory_actuators)):
                 await vibe.rotatory_actuators[i].command(1, random.choice([True, False]))
+            for i in range(len(vibe.linear_actuators)):
+                await vibe.linear_actuators[i].command(granularity * 1000, 1)
             intensity = 100
         else:
             for i in range(len(vibe.actuators)):
                 await vibe.actuators[i].command(intensity/100)
             for i in range(len(vibe.rotatory_actuators)):
                 await vibe.rotatory_actuators[i].command(intensity/100, random.choice([True, False]))
+            for i in range(len(vibe.linear_actuators)):
+                await vibe.linear_actuators[i].command(granularity * 1000, intensity/100)
 
     intensity = max(0, intensity - intensity_reduction_factor)
-    print(f'Sent vibration, intensity: {intensity:.2f}')
+    
 
 keyboard_thread = threading.Thread(target=listen_to_keyboard)
 keyboard_thread.daemon = True  # Set as daemon thread so it exits when main thread exits

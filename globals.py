@@ -66,8 +66,9 @@ button_zone = 0         # A Button
 # mouse_move_intensity: How much to increase intensity when just moving your mouse.
 # I cannot stress enough how much you do not realize your mouse moves even when you're "holding still".
 # For the safety of your nerves, do not set this higher than like 0.1
+# Testing this at 0.05 was enough to make it so mouse movement alone could outpace the default intensity reduction factor.
 
-mouse_move_intensity = 0.05
+mouse_move_intensity = 0.02
 
 # mouse_click_intensity: How much to increase intensity when you click the mouse.
 # Feel free to set this to whatever you want. If you're clicking a lot, lower it, and if not, raise it.

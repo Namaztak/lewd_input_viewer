@@ -3,7 +3,6 @@ import os
 import threading
 import sys
 import asyncio
-import win32gui
 from globals import *
 from plug import *
 from pynput import keyboard, mouse

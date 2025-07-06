@@ -19,7 +19,13 @@ The default keybinds will probably NOT match yours, but the toy vibration functi
 ### What the fuck is a python, where's the goddamn exe?
 I made it easy for lazy people.  
 First run init.bat, then every time after that, run viewer.bat.  
-I've included a shortcut to viewer.bat so you can stick it on your taskbar or whatever, since Windows 11 doesn't just let you stick whatever the fuck you want on the taskbar, and it has to be a shortcut to something.
+* If you're on Windows 11 and wanna put this on your taskbar for easy access, do the following:
+    1. Rename viewer.bat to viewer.exe  
+    2. Drag viewer.exe onto your taskbar  
+    3. Rename viewer.exe back to viewer.bat  
+    4. Right-click on the shortcut on your taskbar, hit properties, and edit the "Target" field to correctly point to viewer.bat, not viewer.exe.
+    5. Hit change icon, navigate to the lewd_input_viewer folder, and set it to "z_dim.ico"
+    6. Leave it there forever.
 
 #### What's it do and how?
 First, it connects to a locally-running Intiface Central server, and gets the connected device(s).  

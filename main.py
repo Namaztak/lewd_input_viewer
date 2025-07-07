@@ -155,6 +155,7 @@ def on_release(key):
             zone.image = zone.d_image
 
 def on_controller_press(button=None, val=None):
+    global intensity
     if button != None:
         if button == button_cw:         # cw key
             cw.image = cw.b_image
@@ -164,6 +165,7 @@ def on_controller_press(button=None, val=None):
             hold.image = hold.b_image
         elif button == button_zone:     # Zone key
             zone.image = zone.b_image
+        intensity += button_intensity
     elif val != None:
         if val == button_up:            # DPad up
             up.image = up.b_image
@@ -190,6 +192,7 @@ def on_controller_press(button=None, val=None):
             left.image = left.d_image
             right.image = right.d_image
             down.image = down.d_image
+        intensity += button_intensity/2
 
 def on_controller_release(button=None, val=None):
     if button != None:
@@ -219,31 +222,33 @@ def listen_to_keyboard():
 #Handles main communication with toy, and reduces intensity after sending the vibration each loop
 async def reduce_intensity(vibe):
     global intensity
-    print(f'Sending vibration, intensity: {intensity:.2f}')
     if intensity == 0:
-        for i in range(len(vibe.actuators)):
-            await vibe.actuators[i].command(0)
-        for i in range(len(vibe.rotatory_actuators)):
-            await vibe.rotatory_actuators[i].command(0, True)
-        for i in range(len(vibe.linear_actuators)):
-            await vibe.linear_actuators[i].command(granularity * 1000, 0)
+        for i in vibe.actuators:
+            await i.command(0)
+        for i in vibe.rotatory_actuators:
+            await i.command(0, True)
+        for i in vibe.linear_actuators:
+            await i.command(granularity * 1000, 0)
     if intensity > 0:
         if intensity > 100:
-            for i in range(len(vibe.actuators)):
-                await vibe.actuators[i].command(1)
-            for i in range(len(vibe.rotatory_actuators)):
-                await vibe.rotatory_actuators[i].command(1, random.choice([True, False]))
-            for i in range(len(vibe.linear_actuators)):
-                await vibe.linear_actuators[i].command(granularity * 1000, 1)
+            for i in vibe.actuators:
+                await i.command(1)
+            for i in vibe.rotatory_actuators:
+                await i.command(1, random.choice([True, False]))
+            for i in vibe.linear_actuators:
+                await i.command(granularity * 1000, 1)
             intensity = 100
+            print('Sending vibration, intensity: MAX')
+            intensity = max(0, intensity - intensity_reduction_factor)
+            return
         else:
-            for i in range(len(vibe.actuators)):
-                await vibe.actuators[i].command(intensity/100)
-            for i in range(len(vibe.rotatory_actuators)):
-                await vibe.rotatory_actuators[i].command(intensity/100, random.choice([True, False]))
-            for i in range(len(vibe.linear_actuators)):
-                await vibe.linear_actuators[i].command(granularity * 1000, intensity/100)
-
+            for i in vibe.actuators:
+                await i.command(intensity/100)
+            for i in vibe.rotatory_actuators:
+                await i.command(intensity/100, random.choice([True, False]))
+            for i in vibe.linear_actuators:
+                await i.command(granularity * 1000, intensity/100)
+    print(f'Sending vibration, intensity: {intensity:.2f}')
     intensity = max(0, intensity - intensity_reduction_factor)
     
 
@@ -289,7 +294,6 @@ async def main():
                             on_controller_press(event.button)
                         except AttributeError:
                             pass
-                    intensity += button_intensity
                 print(f'Intensity: {intensity:.2f}')
             elif event.type == pygame.JOYBUTTONUP:
                 on_controller_release(event.button)

@@ -9,7 +9,7 @@ Change settings to control intensity, and keybindings for the actual viewer in g
 The default keybinds will probably NOT match yours, but the toy vibration functionality will work no matter what your buttons are bound to.
 
 ### Requirements
-* Python 3 installed.  
+* Python 3 installed. ([If you don't already have it, get it here.](https://www.python.org/downloads/))  
 * Intiface Central installed and running.  
 * A toy or machine that Intiface Central can control.  
 * requirements.txt contains the following:  

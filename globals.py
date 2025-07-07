@@ -1,7 +1,10 @@
 import os
 from pynput import keyboard
 
+#initial intensity value. There's no reason to touch this, it's just here to keep the variable outside of the main script.
 intensity = 0
+
+#This is needed for the controller inputs to be read in the background. Again, don't touch this.
 os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 
 

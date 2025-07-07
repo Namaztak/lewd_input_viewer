@@ -1,5 +1,7 @@
 ## What this be?
-An input viewer that vibrates your sex toys. Initially, primarily for playing Tetris (but the vibrator integration is 100% universal, and does NOT care at all what you're actually doing while this is running in the background), interacts with vibrators through [Intiface Central.](https://intiface.com/central/)
+[TLDR quick visual demo here.](https://www.youtube.com/watch?v=iBZ0fyBmsrA)
+
+An input viewer that vibrates your sex toys. Initially, primarily for playing Tetris (but the toy integration is 100% universal, and does NOT care at all what you're actually doing while this is running in the background), interacts with toys/machines through [Intiface Central.](https://intiface.com/central/)
 
 Only currently supports one toy at a time.  
 
@@ -9,7 +11,7 @@ The default keybinds will probably NOT match yours, but the toy vibration functi
 ### Requirements
 * Python 3 installed.  
 * Intiface Central installed and running.  
-* A vibrator that Intiface Central can control.  
+* A toy or machine that Intiface Central can control.  
 * requirements.txt contains the following:  
  * [buttplug-py](https://github.com/Siege-Wizard/buttplug-py/tree/main) for interfacing with the toys  
  * [pygame](https://www.pygame.org/docs/ref/pygame.html) for the visuals and handling controller inputs  
@@ -50,6 +52,9 @@ By default:
 * Moving controller triggers and joysticks increment by 0.05 every frame they're moving.
 * Normal buttons and the dpad increment the intensity by 1 per press.
 * Every 3 seconds (granularity variable), the intensity value gets reduced by 10.
+
+## Donate?
+
 
 To do:  
 * ~~Just make it increase intensity on ALL keyboard and controller inputs.~~  

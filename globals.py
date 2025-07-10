@@ -23,7 +23,7 @@ intensity_reduction_factor = 10
     #I highly recommend setting this to a small decimal value between 0 and 0.3, erring lower, especially for games that use both sticks.
     #Sticks get polled for their movement A LOT, so adjust this with caution.
 
-analog_intensity = 0.05
+analog_intensity = 0.01
 
 #button_intensity: Pressing any button (not including analog triggers, or arcade buttons bound to the triggers), or moving the Dpad on ANY controller increases intensity by this amount
 #I built the program with 1 in mind, so try it as is first.

@@ -167,34 +167,23 @@ def on_controller_press(button=None, val=None):
             zone.image = zone.b_image
         intensity += button_intensity
     elif val != None:
-        if val == button_up:            # DPad up
-            up.image = up.b_image
-        elif val == button_left:        # DPad left
-            left.image = left.b_image
-        elif val == button_right:       # DPad right
+        if val[0] == 1:
             right.image = right.b_image
-        elif val == button_down:        # DPad down
-            down.image = down.b_image
-        elif val == (1, 1):             # DPad diagonals
+        if val[1] == 1:
             up.image = up.b_image
-            right.image = right.b_image
-        elif val == (-1, -1):
-            down.image = down.b_image
+        if val[0] == -1:
             left.image = left.b_image
-        elif val == (1, -1):
-            right.image = right.b_image
+        if val[1] == -1:
             down.image = down.b_image
-        elif val == (-1, 1):
-            up.image = up.b_image
-            left.image = left.b_image
-        elif val == (0, 0):             # DPad center
-            up.image = up.d_image
-            left.image = left.d_image
+        if val[0] == 0:
             right.image = right.d_image
+            left.image = left.d_image
+        if val[1] == 0:
+            up.image = up.d_image
             down.image = down.d_image
         intensity += button_intensity/2
 
-def on_controller_release(button=None, val=None):
+def on_controller_release(button=None):
     if button != None:
         if button == button_cw:         # cw key
             cw.image = cw.d_image
@@ -204,15 +193,6 @@ def on_controller_release(button=None, val=None):
             hold.image = hold.d_image
         elif button == button_zone:
             zone.image = zone.d_image
-    elif val != None:
-        if val == button_up:            # DPad up
-            up.image = up.d_image
-        elif val == button_left:        # DPad left
-            left.image = left.d_image
-        elif val == button_right:       # DPad right
-            right.image = right.d_image
-        elif val == button_down:        # DPad down
-            down.image = down.d_image
 
 def listen_to_keyboard():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:

@@ -19,15 +19,8 @@ The default keybinds will probably NOT match yours, but the toy vibration functi
 * Trust in the fact that this all runs 100% locally and collects/saves absolutely nothing.  
 
 ### What the fuck is a python, where's the goddamn exe?
-I made it easy for lazy people.  
-First run init.bat, then every time after that, run viewer.bat.  
-* If you're on Windows 11 and wanna put this on your taskbar for easy access, do the following:
-    1. Rename viewer.bat to viewer.exe  
-    2. Drag viewer.exe onto your taskbar  
-    3. Rename viewer.exe back to viewer.bat  
-    4. Right-click on the shortcut on your taskbar, hit properties, and edit the "Target" field to correctly point to viewer.bat, not viewer.exe.
-    5. Hit change icon, navigate to the lewd_input_viewer folder, and set it to "z_dim.ico"
-    6. Leave it there forever.
+Go grab it from the releases in the sidebar. Also stop yelling at me.  
+The exe is often not going to be the most up-to-date thing, cause I'm not gonna run this thing through auto-py-to-exe every time I make a small change. Downloading and running the source code is gonna be the best way to get the most recent changes.
 
 #### What's it do and how?
 First, it connects to a locally-running Intiface Central server, and gets the connected device(s).  

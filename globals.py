@@ -19,7 +19,7 @@ os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 
 intensity_reduction_factor = 10
 
-#analog_intensity: Moving any analog axis (this includes triggers) increases intensity by this amount.
+#analog_intensity: Moving any analog axis (this includes triggers) ANY AMOUNT increases intensity by this amount.
     #I highly recommend setting this to a small decimal value between 0 and 0.3, erring lower, especially for games that use both sticks.
     #Sticks get polled for their movement A LOT, so adjust this with caution.
 
@@ -63,7 +63,8 @@ button_cw = 2           # X Button
 button_ccw = 3          # Y Button
 button_hold = 5         # Right Bumper
 button_zone = 0         # A Button
-
+axis_lt = 2             # Left Trigger
+axis_rt = 5             # Right Trigger
 #=====================Mouse Values=========================
 
 # mouse_move_intensity: How much to increase intensity when just moving your mouse.

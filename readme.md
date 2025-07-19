@@ -52,7 +52,6 @@ By default:
 * Scrolling increments by 0.3
 * Moving controller triggers and joysticks increment by 0.05 every frame they're moving.
 * Normal buttons, dpad, keyboard keystrokes, and mouse clicks each increment the intensity by 1 per press.  
-*    Note: Holding Keyboard keys down will continue to add intensity, per your keyboard/windows' auto repeat rate.
 * Every 3 seconds (granularity variable), the intensity value gets reduced by 10.
 
 ## Donate?

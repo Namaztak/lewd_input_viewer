@@ -35,6 +35,8 @@ zone = Button(200, 60, "zone", pygame.K_SPACE)
 button_group = pygame.sprite.Group()
 button_group.add(left, right, down, up, cw, ccw, hold, zone)
 
+pressed_keys = []
+
 #Functions to handle mouse input
 def on_move(x, Y):
     global intensity
@@ -55,40 +57,42 @@ def listen_to_mouse():
 
 #Functions to handle keyboard input
 def on_press(key):
-    global intensity
-    try:
-        if key.char == key_left:  # left key
-            left.image = left.b_image
-        elif key.char == key_right:  # right key
-            right.image = right.b_image
-        elif key.char == key_down:  # down key
-            down.image = down.b_image
-        elif key.char == key_cw:  # cw key
-            cw.image = cw.b_image
-        elif key.char == key_ccw:  # ccw key
-            ccw.image = ccw.b_image
-        elif key.char == key_hold:  # hold key
-            hold.image = hold.b_image          
-        elif key.char == key_zone:
-            zone.image = zone.b_image
-    except AttributeError:
-        if key == key_up:
-            up.image = up.b_image
-        elif key == key_left:  # left key
-            left.image = left.b_image
-        elif key == key_right:  # right key
-            right.image = right.b_image
-        elif key == key_down:  # down key
-            down.image = down.b_image
-        elif key == key_cw:  # cw key
-            cw.image = cw.b_image
-        elif key == key_ccw:  # ccw key
-            ccw.image = ccw.b_image
-        elif key == key_hold:  # hold key
-            hold.image = hold.b_image
-        elif key == key_zone:  # space key
-            zone.image = zone.b_image
-    intensity += button_intensity
+    global intensity, pressed_keys
+    if key not in pressed_keys:
+        try:
+            if key.char == key_left:  # left key
+                left.image = left.b_image
+            elif key.char == key_right:  # right key
+                right.image = right.b_image
+            elif key.char == key_down:  # down key
+                down.image = down.b_image
+            elif key.char == key_cw:  # cw key
+                cw.image = cw.b_image
+            elif key.char == key_ccw:  # ccw key
+                ccw.image = ccw.b_image
+            elif key.char == key_hold:  # hold key
+                hold.image = hold.b_image          
+            elif key.char == key_zone:
+                zone.image = zone.b_image
+        except AttributeError:
+            if key == key_up:
+                up.image = up.b_image
+            elif key == key_left:  # left key
+                left.image = left.b_image
+            elif key == key_right:  # right key
+                right.image = right.b_image
+            elif key == key_down:  # down key
+                down.image = down.b_image
+            elif key == key_cw:  # cw key
+                cw.image = cw.b_image
+            elif key == key_ccw:  # ccw key
+                ccw.image = ccw.b_image
+            elif key == key_hold:  # hold key
+                hold.image = hold.b_image
+            elif key == key_zone:  # space key
+                zone.image = zone.b_image
+        pressed_keys.append(key)
+        intensity += button_intensity
 
 def on_release(key):
     try:
@@ -123,6 +127,7 @@ def on_release(key):
             hold.image = hold.d_image
         elif key == key_zone:          # Zone key
             zone.image = zone.d_image
+    pressed_keys.remove(key)
 
 def on_controller_press(button=None, val=None):
     global intensity

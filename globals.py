@@ -37,34 +37,40 @@ button_intensity = 1
 granularity = 3
 
 #===================Keyboard binds=========================
-#Tetris keybinds for the input viewer
+#Keybinds for the input viewer
 #If any of the keys you use aren't letters
 #find what the keycode is here:
 #https://pynput.readthedocs.io/en/latest/_modules/pynput/keyboard/_base.html#Controller.press
 
-key_left = "r"
-key_right = "t"
-key_down = "s"
+key_left = keyboard.KeyCode(char="a")
+key_right = keyboard.KeyCode(char="t")
+key_down = keyboard.KeyCode(char="s")
 key_up = keyboard.Key.alt_l
-key_cw = "i"
-key_ccw = "n"
-key_hold = "e"
-key_zone = keyboard.Key.space
+key_1 = keyboard.KeyCode(char="n")
+key_2 = keyboard.KeyCode(char="e")
+key_3 = keyboard.KeyCode(char="i")
+key_4 = keyboard.KeyCode(char="o")
+key_5 = keyboard.Key.space
+key_6 = keyboard.KeyCode(char=",")
+key_7 = keyboard.KeyCode(char=".")
+key_8 = keyboard.KeyCode(char="/")
 
 #===============Xbox 360 controller binds==================
 # Leave the directions alone
 # Button values can be found here: https://www.pygame.org/docs/ref/joystick.html
 
-button_left = (-1, 0)   #Dpad Left
-button_right = (1, 0)   #Dpad Right
-button_down = (0, -1)   #Dpad Down
-button_up = (0, 1)      #Dpad Up
-button_cw = 2           # X Button
-button_ccw = 3          # Y Button
-button_hold = 5         # Right Bumper
-button_zone = 0         # A Button
-axis_lt = 2             # Left Trigger
-axis_rt = 5             # Right Trigger
+controller_button_left = (-1, 0)   #Dpad Left
+controller_button_right = (1, 0)   #Dpad Right
+controller_button_down = (0, -1)   #Dpad Down
+controller_button_up = (0, 1)      #Dpad Up
+controller_button_1 = 3            # Y Button
+controller_button_2 = 5            # Right Bumper
+controller_button_3 = 2            # X Button
+controller_button_4 = 4            # Left Bumper
+controller_button_5 = 0            # A Button
+controller_button_6 = 1            # B Button
+controller_button_7 = 5            # Left Trigger (axis 2)
+controller_button_8 = 4            # Right Trigger (axis 5)
 #=====================Mouse Values=========================
 
 # mouse_move_intensity: How much to increase intensity when just moving your mouse.

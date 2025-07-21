@@ -13,7 +13,7 @@ from buttons import *
 pygame.init()
 
 pygame.joystick.init()
-width, height = 370, 110
+width, height = 430, 110
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Input Viewer")
 
@@ -22,18 +22,23 @@ screen.fill((0, 255, 0))
 
 
 
-left = Button(0, 0, "left", pygame.K_r)
-right = Button(120, 0, "right", pygame.K_t)
-down = Button(60, 0, "down", pygame.K_s)
-up = Button(120, 60, "up", pygame.K_LALT)
-cw = Button(320, 0, "cw", pygame.K_i)
-ccw = Button(200, 0, "ccw", pygame.K_n)
-hold = Button(260, 0, "hold", pygame.K_e)
-zone = Button(200, 60, "zone", pygame.K_SPACE)
+left = Button(0, 0, "left", key_left, controller_button_left)
+right = Button(120, 0, "right", key_right, controller_button_right)
+down = Button(60, 0, "down", key_down, controller_button_down)
+up = Button(120, 60, "up", key_up, controller_button_up)
+button1 = Button(200, 0, "1", key_1, controller_button_1)
+button2 = Button(260, 0, "2", key_2, controller_button_2)
+button3 = Button(320, 0, "3", key_3, controller_button_3)
+button4 = Button(380, 0, "4", key_4, controller_button_4)
+button5 = Button(200, 60, "5", key_5, controller_button_5)
+button6 = Button(260, 60, "6", key_6, controller_button_6)
+button7 = Button(320, 60, "7", key_7, controller_button_7, is_trigger=True)
+button8 = Button(380, 60, "8", key_8, controller_button_8, is_trigger=True)
 
+buttons = [left, right, down, up, button1, button2, button3, button4, button5, button6, button7, button8]
 #add buttons to sprite group
 button_group = pygame.sprite.Group()
-button_group.add(left, right, down, up, cw, ccw, hold, zone)
+button_group.add(buttons)
 
 pressed_keys = []
 
@@ -57,91 +62,29 @@ def listen_to_mouse():
 
 #Functions to handle keyboard input
 def on_press(key):
-    global intensity, pressed_keys
+    global intensity, pressed_keys, buttons
     if key not in pressed_keys:
-        try:
-            if key.char == key_left:  # left key
-                left.image = left.b_image
-            elif key.char == key_right:  # right key
-                right.image = right.b_image
-            elif key.char == key_down:  # down key
-                down.image = down.b_image
-            elif key.char == key_cw:  # cw key
-                cw.image = cw.b_image
-            elif key.char == key_ccw:  # ccw key
-                ccw.image = ccw.b_image
-            elif key.char == key_hold:  # hold key
-                hold.image = hold.b_image          
-            elif key.char == key_zone:
-                zone.image = zone.b_image
-        except AttributeError:
-            if key == key_up:
-                up.image = up.b_image
-            elif key == key_left:  # left key
-                left.image = left.b_image
-            elif key == key_right:  # right key
-                right.image = right.b_image
-            elif key == key_down:  # down key
-                down.image = down.b_image
-            elif key == key_cw:  # cw key
-                cw.image = cw.b_image
-            elif key == key_ccw:  # ccw key
-                ccw.image = ccw.b_image
-            elif key == key_hold:  # hold key
-                hold.image = hold.b_image
-            elif key == key_zone:  # space key
-                zone.image = zone.b_image
+        for button in buttons:
+            if button.key == key:
+                button.image = button.b_image
         pressed_keys.append(key)
         intensity += button_intensity
 
 def on_release(key):
-    try:
-        if key.char == key_left:  # left key
-            left.image = left.d_image
-        elif key.char == key_right:    # right key
-            right.image = right.d_image
-        elif key.char == key_down:     # down key
-            down.image = down.d_image
-        elif key.char == key_cw:       # cw key
-            cw.image = cw.d_image
-        elif key.char == key_ccw:      # ccw key
-            ccw.image = ccw.d_image
-        elif key.char == key_hold:     # hold key
-            hold.image = hold.d_image
-        elif key.char == key_zone:     # Zone key
-            zone.image = zone.d_image
-    except AttributeError:
-        if key == key_up:
-            up.image = up.d_image
-        elif key == key_left:          # left key
-            left.image = left.d_image
-        elif key == key_right:         # right key
-            right.image = right.d_image
-        elif key == key_down:          # down key
-            down.image = down.d_image
-        elif key == key_cw:            # cw key
-            cw.image = cw.d_image
-        elif key == key_ccw:           # ccw key
-            ccw.image = ccw.d_image
-        elif key == key_hold:          # hold key
-            hold.image = hold.d_image
-        elif key == key_zone:          # Zone key
-            zone.image = zone.d_image
+    global intensity, buttons
+    for button in buttons:
+        if button.key == key:
+            button.image = button.d_image
     pressed_keys.remove(key)
 
-def on_controller_press(button=None, val=None):
-    global intensity
-    if button != None:
-        if button == button_cw:         # cw key
-            cw.image = cw.b_image
-        elif button == button_ccw:      # ccw key
-            ccw.image = ccw.b_image
-        elif button == button_hold:     # hold key
-            hold.image = hold.b_image
-        elif button == button_zone:     # Zone key
-            zone.image = zone.b_image
+def on_controller_press(sent_button=None, val=None):
+    global intensity, buttons
+    if sent_button is not None:
+        for button in buttons:
+            if button.controller_button == sent_button and not button.is_trigger:
+                button.image = button.b_image
         intensity += button_intensity
-    elif val != None:
+    elif val is not None:
         if val[0] == 1:
             right.image = right.b_image
         if val[1] == 1:
@@ -158,16 +101,11 @@ def on_controller_press(button=None, val=None):
             down.image = down.d_image
         intensity += button_intensity/2
 
-def on_controller_release(button=None):
-    if button != None:
-        if button == button_cw:         # cw key
-            cw.image = cw.d_image
-        elif button == button_ccw:      # ccw key
-            ccw.image = ccw.d_image
-        elif button == button_hold:     # hold key
-            hold.image = hold.d_image
-        elif button == button_zone:
-            zone.image = zone.d_image
+def on_controller_release(sent_button=None):
+    if sent_button is not None:
+        for button in buttons:
+            if button.controller_button == sent_button and not button.is_trigger:
+                button.image = button.d_image
 
 def listen_to_keyboard():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
@@ -236,6 +174,12 @@ async def main():
                     print(i, joysticks[i].get_name())
             elif event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION,pygame.JOYHATMOTION]:
                 if event.type == pygame.JOYAXISMOTION:
+                    print(event.axis, event.value)
+                    for button in buttons:
+                        if button.controller_button == event.axis and event.value >= 0.1 and button.is_trigger:
+                            button.image = button.b_image
+                        elif button.controller_button == event.axis and event.value < 0.1 and button.is_trigger:
+                            button.image = button.d_image
                     intensity += analog_intensity
                     print(f'Intensity: {intensity:.2f}')
                 else:

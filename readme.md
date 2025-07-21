@@ -47,8 +47,9 @@ By default:
 * Normal buttons, dpad, keyboard keystrokes, and mouse clicks each increment the intensity by 1 per press.  
 * Every 3 seconds (granularity variable), the intensity value gets reduced by 10.
 
-## Donate?
+#### Donate?
 
+If this thing does good stuff for you, [toss me a buck or few](https://ko-fi.com/nam_137), would ya?
 
 To do:  
 * ~~Just make it increase intensity on ALL keyboard and controller inputs.~~  
@@ -59,9 +60,5 @@ To do:
 * Make the key binding for the visuals part a semi-automated, GUI-driven affair.
 * Make per-usage profiles/scenes a thing.
 * Make it so it doesn't freak the fuck out while dragging the viewer window around.
-* ^ Apparently this one is impossible on Windows. Well, at least it's not my fault. Just try not to drag the window around. It doesn't really like it.
- * Your PC is gonna freak out a bit while you drag the window, then it'll chill again. What's happening is it's pausing all the threads while you're moving the window, and since one of those threads is directly tied to your mouse input, it gets upset. After you set the window back down wherever you want it, it'll work fine again. But since this program doesn't need to be in the foreground, neither for the input listening, nor capturing its visuals in OBS or whatever, you can realistically just cover it up with whatever other programs you're running and forget it exists. If you don't care about having it handle your mouse inputs, and you'd prefer to fix this issue completely, go into main.py and comment out the mouse thread lines.
-
- #### Donate?
-
- If this thing does good stuff for you, [toss me a buck or few](https://ko-fi.com/nam_137), would ya?
+    * ^ Apparently this one is impossible on Windows. Well, at least it's not my fault. Just try not to drag the window around. It doesn't really like it.
+    * Your PC is gonna freak out a bit while you drag the window, then it'll chill again. What's happening is it's pausing all the threads while you're moving the window, and since one of those threads is directly tied to your mouse input, it gets upset. After you set the window back down wherever you want it, it'll work fine again. But since this program doesn't need to be in the foreground, neither for the input listening, nor capturing its visuals in OBS or whatever, you can realistically just cover it up with whatever other programs you're running and forget it exists. If you don't care about having it handle your mouse inputs, and you'd prefer to fix this issue completely, go into main.py and comment out the mouse thread lines.

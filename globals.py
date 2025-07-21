@@ -42,7 +42,7 @@ granularity = 3
 #find what the keycode is here:
 #https://pynput.readthedocs.io/en/latest/_modules/pynput/keyboard/_base.html#Controller.press
 
-key_left = keyboard.KeyCode(char="a")
+key_left = keyboard.KeyCode(char="r")
 key_right = keyboard.KeyCode(char="t")
 key_down = keyboard.KeyCode(char="s")
 key_up = keyboard.Key.alt_l

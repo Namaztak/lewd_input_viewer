@@ -59,6 +59,13 @@ To do:
 * Make several different input viewing scenes, for different use cases.
 * Make the key binding for the visuals part a semi-automated, GUI-driven affair.
 * Make per-usage profiles/scenes a thing.
+    * Cleaned up icon naming/handling so people can just make their own sets of icons.
 * Make it so it doesn't freak the fuck out while dragging the viewer window around.
     * ^ Apparently this one is impossible on Windows. Well, at least it's not my fault. Just try not to drag the window around. It doesn't really like it.
     * Your PC is gonna freak out a bit while you drag the window, then it'll chill again. What's happening is it's pausing all the threads while you're moving the window, and since one of those threads is directly tied to your mouse input, it gets upset. After you set the window back down wherever you want it, it'll work fine again. But since this program doesn't need to be in the foreground, neither for the input listening, nor capturing its visuals in OBS or whatever, you can realistically just cover it up with whatever other programs you're running and forget it exists. If you don't care about having it handle your mouse inputs, and you'd prefer to fix this issue completely, go into main.py and comment out the mouse thread lines.
+
+### Make your own icons?
+
+Make the icons 50x50 pngs and name them the same things as you see in the included icons folder(s).  
+Whatever set of icons you wanna use, just have them in a folder called "icons" in the root directory.  
+If you wanna hide a button you're not using, just put empty pngs in the folder and make sure they have the names of where they should go in the viewer, or the viewer will get upset and not run.

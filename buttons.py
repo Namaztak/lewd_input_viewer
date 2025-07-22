@@ -34,11 +34,10 @@ bright_icons = {
 class Button(pygame.sprite.Sprite):
     def __init__(self, x, y, name, key=None, controller_button=None, is_trigger=False):
         super().__init__()
+        self.name = name
         self.key = key
         self.is_trigger = is_trigger
         self.controller_button = controller_button
         self.image = dim_icons[name]
-        self.d_image = dim_icons[name]
-        self.b_image = bright_icons[name]
-        self.rect = self.d_image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)

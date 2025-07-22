@@ -15,6 +15,7 @@ pygame.init()
 pygame.joystick.init()
 width, height = 430, 110
 screen = pygame.display.set_mode((width, height))
+surface = pygame.display.get_surface()
 pygame.display.set_caption("Input Viewer")
 
 #set background to green for chromakey usage
@@ -66,7 +67,7 @@ def on_press(key):
     if key not in pressed_keys:
         for button in buttons:
             if button.key == key:
-                button.image = button.b_image
+                button.image = bright_icons[button.name]
         pressed_keys.append(key)
         intensity += button_intensity
 
@@ -74,7 +75,7 @@ def on_release(key):
     global intensity, buttons
     for button in buttons:
         if button.key == key:
-            button.image = button.d_image
+            button.image = dim_icons[button.name]
     pressed_keys.remove(key)
 
 def on_controller_press(sent_button=None, val=None):
@@ -86,19 +87,19 @@ def on_controller_press(sent_button=None, val=None):
         intensity += button_intensity
     elif val is not None:
         if val[0] == 1:
-            right.image = right.b_image
+            right.image = bright_icons["right"]
         if val[1] == 1:
-            up.image = up.b_image
+            up.image = bright_icons["up"]
         if val[0] == -1:
-            left.image = left.b_image
+            left.image = bright_icons["left"]
         if val[1] == -1:
-            down.image = down.b_image
+            down.image = bright_icons["down"]
         if val[0] == 0:
-            right.image = right.d_image
-            left.image = left.d_image
+            right.image = dim_icons["right"]
+            left.image = dim_icons["left"]
         if val[1] == 0:
-            up.image = up.d_image
-            down.image = down.d_image
+            up.image = dim_icons["up"]
+            down.image = dim_icons["down"]
         intensity += button_intensity/2
 
 def on_controller_release(sent_button=None):
@@ -200,6 +201,7 @@ async def main():
         button_group.draw(screen)
         pygame.display.update()
         pygame.time.Clock().tick(60)  # Limit to 60 FPS
+        surface.fill((0, 255, 0))
         if reduction_counter > (60 * granularity) and vibe != None:
             await reduce_intensity(vibe)
             reduction_counter = 0

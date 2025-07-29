@@ -76,14 +76,15 @@ def on_release(key):
     for button in buttons:
         if button.key == key:
             button.image = dim_icons[button.name]
-    pressed_keys.remove(key)
+    if key in pressed_keys:
+        pressed_keys.remove(key)
 
 def on_controller_press(sent_button=None, val=None):
     global intensity, buttons
     if sent_button is not None:
         for button in buttons:
             if button.controller_button == sent_button and not button.is_trigger:
-                button.image = button.b_image
+                button.image = bright_icons[button.name]
         intensity += button_intensity
     elif val is not None:
         if val[0] == 1:
@@ -106,7 +107,7 @@ def on_controller_release(sent_button=None):
     if sent_button is not None:
         for button in buttons:
             if button.controller_button == sent_button and not button.is_trigger:
-                button.image = button.d_image
+                button.image = dim_icons[button.name]
 
 def listen_to_keyboard():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
@@ -178,9 +179,9 @@ async def main():
                     print(event.axis, event.value)
                     for button in buttons:
                         if button.controller_button == event.axis and event.value >= 0.1 and button.is_trigger:
-                            button.image = button.b_image
+                            button.image = bright_icons[button.name]
                         elif button.controller_button == event.axis and event.value < 0.1 and button.is_trigger:
-                            button.image = button.d_image
+                            button.image = dim_icons[button.name]
                     intensity += analog_intensity
                     print(f'Intensity: {intensity:.2f}')
                 else:

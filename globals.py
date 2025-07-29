@@ -58,6 +58,7 @@ key_8 = keyboard.KeyCode(char="/")
 #===============Xbox 360 controller binds==================
 # Leave the directions alone
 # Button values can be found here: https://www.pygame.org/docs/ref/joystick.html
+# Buttons are visually arranged in reading order from 1 to 8.
 
 controller_button_left = (-1, 0)   #Dpad Left
 controller_button_right = (1, 0)   #Dpad Right
@@ -83,9 +84,16 @@ mouse_move_intensity = 0.02
 # mouse_click_intensity: How much to increase intensity when you click the mouse.
 # Feel free to set this to whatever you want. If you're clicking a lot, lower it, and if not, raise it.
 
-mouse_click_intensity = 1
+mouse_click_intensity = 5
 
 # mouse_scroll_intensity: How much to increase intensity when you scroll the mouse wheel.
 # If you, like me, are a speedrunner that likes to have jump bound to scrolling, say for bunnyhopping, maybe keep this one low.
 
 mouse_scroll_intensity = 0.3
+
+#========================P2 Values=========================
+
+p2_button_intensity = 1
+p2_analog_intensity = 0.01
+p2_granularity = 3
+p2_intensity_reduction_factor = 10

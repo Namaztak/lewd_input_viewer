@@ -17,7 +17,6 @@ width, height = 430, 110
 screen = pygame.display.set_mode((width, height))
 surface = pygame.display.get_surface()
 pygame.display.set_caption("Input Viewer")
-
 #set background to green for chromakey usage
 screen.fill((0, 255, 0))
 
@@ -117,32 +116,33 @@ def listen_to_keyboard():
 #Handles main communication with toy, and reduces intensity after sending the vibration each loop
 async def reduce_intensity(vibe):
     global intensity
-    if intensity == 0:
-        for i in vibe.actuators:
-            await i.command(0)
-        for i in vibe.rotatory_actuators:
-            await i.command(0, True)
-        for i in vibe.linear_actuators:
-            await i.command(granularity * 1000, 0)
-    if intensity > 0:
-        if intensity > 100:
-            for i in vibe.actuators:
-                await i.command(1)
-            for i in vibe.rotatory_actuators:
-                await i.command(1, random.choice([True, False]))
-            for i in vibe.linear_actuators:
-                await i.command(granularity * 1000, 1)
-            intensity = 100
-            print('Sending vibration, intensity: MAX')
-            intensity = max(0, intensity - intensity_reduction_factor)
-            return
-        else:
-            for i in vibe.actuators:
-                await i.command(intensity/100)
-            for i in vibe.rotatory_actuators:
-                await i.command(intensity/100, random.choice([True, False]))
-            for i in vibe.linear_actuators:
-                await i.command(granularity * 1000, intensity/100)
+    for i in vibe:
+        if intensity == 0:
+            for j in i.actuators:
+                await j.command(0)
+            for j in i.rotatory_actuators:
+                await j.command(0, True)
+            for j in i.linear_actuators:
+                await j.command(granularity * 1000, 0)
+        if intensity > 0:
+            if intensity > 100:
+                for j in i.actuators:
+                    await j.command(1)
+                for j in i.rotatory_actuators:
+                    await j.command(1, random.choice([True, False]))
+                for j in i.linear_actuators:
+                    await j.command(granularity * 1000, 1)
+                intensity = 100
+                print('Sending vibration, intensity: MAX')
+                intensity = max(0, intensity - intensity_reduction_factor)
+                return
+            else:
+                for j in i.actuators:
+                    await j.command(intensity/100)
+                for j in i.rotatory_actuators:
+                    await j.command(intensity/100, random.choice([True, False]))
+                for j in i.linear_actuators:
+                    await j.command(granularity * 1000, intensity/100)
     print(f'Sending vibration, intensity: {intensity:.2f}')
     intensity = max(0, intensity - intensity_reduction_factor)
     
